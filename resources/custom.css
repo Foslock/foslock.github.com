@@ -1,0 +1,55 @@
+.container {
+	max-width: 600px;
+	margin-left: auto;
+    margin-right: auto;
+	display: block;
+
+	/* Referenced some of these styles from bootstrap's source code */
+	padding: 4px;
+  	background-color: rgb(235, 235, 235);
+  	border: 1px solid rgb(200, 200, 200);
+ 	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+	color: rgba(0, 0, 0, 1.0);
+	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+	text-align: center;
+	font-size: 48px;
+	font-weight: 100;
+  	line-height: 30px;
+}
+
+.link {
+	text-align: center;
+	font-size: 28px;
+	color: black;
+}
+
+#fosterPic {
+	margin-bottom: 96px;
+	margin-top: 64px;
+	border-radius: 20px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+    -webkit-box-reflect: below 1px
+    	-webkit-linear-gradient(transparent, transparent 70%, rgba(255, 255, 255, 0.5));
+}
+
+#biography {
+	padding: 20px;
+	color: rgba(0, 0, 0, 1.0);
+	font-size: 18px;
+}
+
+#resume {
+	padding-left: 2em;
+	padding-right: 2em;
+}
+
