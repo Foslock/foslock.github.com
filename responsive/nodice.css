@@ -1,5 +1,7 @@
 p {
 	text-align: center;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
 #dice {
@@ -7,5 +9,5 @@ p {
 }
 
 #nodice {
-	display: inline;
+	display: block;
 }
