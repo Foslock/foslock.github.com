@@ -403,7 +403,7 @@ function Frogger() {
 
 		// Check to see if time has run out
 		if (this.currentTime > 0 && !this.frog.isDying) {
-			this.currentTime -= 1;
+			// this.currentTime -= 1;
 		} else if (!this.frog.isDying) {
 			this.kill_frog();
 		}
