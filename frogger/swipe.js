@@ -3,8 +3,10 @@
 
     function addSwipeListener(el, listener)
     {
+     var moveThreshold = 30;
      var startX;
      var dx;
+     var dy;
      var direction;
 
      function cancelTouch()
@@ -13,37 +15,43 @@
       el.removeEventListener('touchend', onTouchEnd);
       startX = null;
       startY = null;
-      direction = null;
+      current_dx = null;
+      current_dy = null;
      }
 
      function onTouchMove(e)
      {
-      if (e.touches.length > 1)
-      {
+      if (e.touches.length > 1) {
        cancelTouch();
-      }
-      else
-      {
+      } else {
        dx = e.touches[0].pageX - startX;
-       var dy = e.touches[0].pageY - startY;
-       if (direction == null)
-       {
-        direction = dx;
+       dy = e.touches[0].pageY - startY;
+
+       if (current_dx == null) {
+        current_dx = dx;
+       } else if ((current_dx < 0 && dx > 0) ||
+                (current_dx > 0 && dx < 0)) {
+          cancelTouch();
        }
-       else if ((direction < 0 && dx > 0) || (direction > 0 && dx < 0) || Math.abs(dy) > 400)
-       {
-        cancelTouch();
+
+       if (current_dy == null) {
+        current_dy = dy;
+       } else if ((current_dy < 0 && dy > 0) ||
+                (current_dy > 0 && dy < 0)) {
+          cancelTouch();
        }
-      }
+      } 
      }
 
      function onTouchEnd(e)
      {
        cancelTouch();
-      if (Math.abs(dx) > 30)
-      {
+      if (Math.abs(dx) > moveThreshold) {
         listener({ target: el, direction: dx > 0 ? 'right' : 'left' });
         dx = 0;
+      } else if (Math.abs(dy) > moveThreshold) {
+        listener({ target: el, direction: dy > 0 ? 'down' : 'up' });
+        dy = 0;
       }
      }
 
@@ -51,8 +59,7 @@
      {
         e.preventDefault();
         e.stopPropagation();
-      if (e.touches.length == 1)
-      {
+      if (e.touches.length == 1) {
        startX = e.touches[0].pageX;
        startY = e.touches[0].pageY;
        el.addEventListener('touchmove', onTouchMove, false);
