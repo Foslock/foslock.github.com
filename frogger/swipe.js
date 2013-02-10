@@ -29,7 +29,7 @@
       } else {
        dx = e.touches[0].pageX - startX;
        dy = e.touches[0].pageY - startY;
-
+/*
        if (current_dx == null) {
         current_dx = dx;
        } else if ((current_dx < 0 && dx > 0) ||
@@ -45,6 +45,7 @@
                 (current_dy > 0 && dy < 0)) {
           cancelTouch();
        }
+       */
       } 
      }
 
