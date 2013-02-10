@@ -1,4 +1,4 @@
-// Slightly modified code by Dave Dunkin
+    // Slightly modified code by Dave Dunkin
     // http://rabblerule.blogspot.com/2009/08/detecting-swipe-in-webkit.html
 
     function addSwipeListener(el, listener)
@@ -29,23 +29,6 @@
       } else {
        dx = e.touches[0].pageX - startX;
        dy = e.touches[0].pageY - startY;
-/*
-       if (current_dx == null) {
-        current_dx = dx;
-       } else if ((current_dx < 0 && dx > 0) ||
-                (current_dx > 0 && dx < 0)) {
-        if (Math.abs(dx) > Math.abs(dy)) {
-          cancelTouch();
-        }
-       }
-
-       if (current_dy == null) {
-        current_dy = dy;
-       } else if ((current_dy < 0 && dy > 0) ||
-                (current_dy > 0 && dy < 0)) {
-          cancelTouch();
-       }
-       */
       } 
      }
 

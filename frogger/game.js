@@ -9,7 +9,7 @@ var FRAME_INTERVAL = 30; // Time (ms) between each game loop frame
 var ROW_HEIGHT = 36; // The height of each row you can move to in the game
 var SCORE_PER_ROW = 10;
 var SCORE_PER_LEVEL = 100;
-var TIME_PER_LEVEL = 800;
+var TIME_PER_LEVEL = 1000;
 
 var clamp = function(val, min, max) {
 	if (val < min) {
@@ -240,7 +240,7 @@ function Frogger() {
 		for (var i = 0; i < 5; i++) {
 			var rand_x = Math.random() * CANVAS_WIDTH;
 			var kind = i % 4;
-			var carCount = this.levelNumber + 1;
+			var carCount = Math.floor(this.levelNumber/2) + 1;
 			for (var j = 0; j < carCount; j++) {
 				var veh = new Vehicle();
 				veh.x = (rand_x + (j * veh.width * 4)) % CANVAS_WIDTH;
@@ -404,7 +404,7 @@ function Frogger() {
 
 		// Check to see if time has run out
 		if (this.currentTime > 0 && !this.frog.isDying) {
-			// this.currentTime -= 1;
+			this.currentTime -= 1;
 		} else if (!this.frog.isDying) {
 			this.kill_frog();
 		}
