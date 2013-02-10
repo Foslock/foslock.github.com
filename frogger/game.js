@@ -240,7 +240,7 @@ function Frogger() {
 		for (var i = 0; i < 5; i++) {
 			var rand_x = Math.random() * CANVAS_WIDTH;
 			var kind = i % 4;
-			var carCount = self.levelNumber;
+			var carCount = self.levelNumber + 1;
 			for (var j = 0; j < carCount; j++) {
 				var veh = new Vehicle();
 				veh.x = (rand_x + (j * veh.width * 4)) % CANVAS_WIDTH;

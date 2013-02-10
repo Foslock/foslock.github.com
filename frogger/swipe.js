@@ -3,7 +3,7 @@
 
     function addSwipeListener(el, listener)
     {
-     var moveThreshold = 30;
+     var moveThreshold = 100;
      var startX;
      var startY;
      var dx;
