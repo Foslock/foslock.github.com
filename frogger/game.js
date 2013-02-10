@@ -24,8 +24,10 @@ var clamp = function(val, min, max) {
 function Frogger() {
 	var spritesheet = new Image();
 	var dead_frog = new Image();
+	this.game_over = new Image();
 	spritesheet.src = "assets/frogger_sprites.png";
 	dead_frog.src = "assets/dead_frog.png";
+	this.game_over.src = "assets/game_over.png";
 
 	var y_for_row_index = function(index) {
 		return 490 - (index * ROW_HEIGHT);
@@ -240,7 +242,7 @@ function Frogger() {
 		for (var i = 0; i < 5; i++) {
 			var rand_x = Math.random() * CANVAS_WIDTH;
 			var kind = i % 4;
-			var carCount = Math.floor(this.levelNumber/2);
+			var carCount = Math.floor(this.levelNumber / 2.0) + 1;
 			for (var j = 0; j < carCount; j++) {
 				var veh = new Vehicle();
 				veh.x = (rand_x + (j * veh.width * 4)) % CANVAS_WIDTH;
@@ -497,7 +499,10 @@ function start_game() {
 		game.draw_screen();
 
 		if (game.is_gameover()) {
-			// clearInterval(loop);
+			clearInterval(loop);
+			var canvas = document.getElementById('game');
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(game.game_over, CANVAS_WIDTH/2 - 200, CANVAS_HEIGHT/2 + 50);
 		}
 
 	}, FRAME_INTERVAL);
