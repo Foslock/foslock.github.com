@@ -5,9 +5,12 @@
     {
      var moveThreshold = 30;
      var startX;
+     var startY;
      var dx;
      var dy;
      var direction;
+     var current_dx;
+     var current_dy;
 
      function cancelTouch()
      {
