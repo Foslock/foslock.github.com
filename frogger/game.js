@@ -514,5 +514,10 @@ function start_game() {
 		}
 	};
 	document.onkeydown = checkArrows;
+
+	addSwipeListener(document.getElementById('game'), function(e) {
+		game.move_frog(e.direction);
+    });
+
 	document.getElementById('game').focus();
 };
