@@ -34,7 +34,9 @@
         current_dx = dx;
        } else if ((current_dx < 0 && dx > 0) ||
                 (current_dx > 0 && dx < 0)) {
+        if (Math.abs(dx) > Math.abs(dy)) {
           cancelTouch();
+        }
        }
 
        if (current_dy == null) {
