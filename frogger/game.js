@@ -224,17 +224,15 @@ function Frogger() {
 	};
 
 	this.frog = new Frog();
-	this.frog.reset_location();
-	this.currentLives = 3;
-	this.levelNumber = 1;
-	this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
-	this.currentHighestRow = 0;
-	this.score = 0;
 	this.highscore = 0;
-	this.logs = [];
-	this.vehicles = [];
+	this.frog.reset_location();
 
-	this.initialize_obstacles = function() {
+	this.initialize_game = function() {
+		this.currentLives = 3;
+		this.levelNumber = 1;
+		this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
+		this.currentHighestRow = 0;
+		this.score = 0;
 		this.logs = [];
 		this.vehicles = [];
 
@@ -491,22 +489,26 @@ function Frogger() {
 
 // Jump in function from HTML
 function start_game() {
-	console.log("Starting game...");
 	var game = new Frogger();
-	game.initialize_obstacles();
+	game.initialize_game();
+	
+	var intervalLoop = null;
 
-	var loop = setInterval(function() {
+	var game_loop = function() {
 		game.step_logic();
 		game.draw_screen();
 
 		if (game.is_gameover()) {
-			clearInterval(loop);
+			clearInterval(intervalLoop);
 			var canvas = document.getElementById('game');
 			var ctx = canvas.getContext('2d');
 			ctx.drawImage(game.game_over, CANVAS_WIDTH/2 - 200, CANVAS_HEIGHT/2 + 50);
 		}
 
-	}, FRAME_INTERVAL);
+	};
+
+	// Start the game loop in an interval
+	intervalLoop = setInterval(game_loop, FRAME_INTERVAL);
 
 	checkArrows = function(e) {
 		e = e || window.event;
@@ -520,7 +522,15 @@ function start_game() {
 			game.move_frog("down");
 		}
 	};
+
 	document.onkeydown = checkArrows;
+	document.getElementById('game').onclick = function() {
+		if (game.is_gameover()) {
+			// Restart the game on click
+			game.initialize_game();
+			intervalLoop = setInterval(game_loop, FRAME_INTERVAL);
+		}
+	}
 
 	addSwipeListener(document.getElementById('game'), function(e) {
 		game.move_frog(e.direction);
