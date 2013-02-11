@@ -10,6 +10,7 @@ var ROW_HEIGHT = 36; // The height of each row you can move to in the game
 var SCORE_PER_ROW = 10;
 var SCORE_PER_LEVEL = 100;
 var TIME_PER_LEVEL = 1000;
+var current_high_score = 0;
 
 var clamp = function(val, min, max) {
 	if (val < min) {
@@ -224,15 +225,14 @@ function Frogger() {
 	};
 
 	this.frog = new Frog();
-	this.highscore = 0;
 	this.frog.reset_location();
+	this.currentLives = 3;
+	this.levelNumber = 1;
+	this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
+	this.currentHighestRow = 0;
+	this.score = 0;
 
-	this.initialize_game = function() {
-		this.currentLives = 3;
-		this.levelNumber = 1;
-		this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
-		this.currentHighestRow = 0;
-		this.score = 0;
+	this.initialize_obstacles = function() {
 		this.logs = [];
 		this.vehicles = [];
 
@@ -348,8 +348,8 @@ function Frogger() {
 				}
 			}
 		}
-		if (this.highscore < this.score) {
-			this.highscore = this.score;
+		if (current_high_score < this.score) {
+			current_high_score = this.score;
 		}
 	};
 
@@ -451,7 +451,7 @@ function Frogger() {
 		ctx.font = "24px Helvetica-Bold";
 		ctx.fillText("Level " + this.levelNumber, 65, 544);
 		ctx.font = "14px Helvetica-Bold";
-		ctx.fillText("Score " + this.score + "   " + "Highscore " + this.highscore,
+		ctx.fillText("Score " + this.score + "   " + "Highscore " + current_high_score,
 			2, 560);
 
 		// Draw time rectangle
@@ -490,8 +490,8 @@ function Frogger() {
 // Jump in function from HTML
 function start_game() {
 	var game = new Frogger();
-	game.initialize_game();
-	
+	game.initialize_obstacles();
+
 	var intervalLoop = null;
 
 	var game_loop = function() {
@@ -527,7 +527,8 @@ function start_game() {
 	document.getElementById('game').onclick = function() {
 		if (game.is_gameover()) {
 			// Restart the game on click
-			game.initialize_game();
+			game = new Frogger();
+			game.initialize_obstacles();
 			intervalLoop = setInterval(game_loop, FRAME_INTERVAL);
 		}
 	}
