@@ -364,6 +364,7 @@ function Frogger() {
 			this.levelNumber++;
 			this.initialize_obstacles();
 			this.currentTime = TIME_PER_LEVEL - (this.levelNumber * 50);
+			this.currentHighestRow = 0;
 		}
 	};
 
