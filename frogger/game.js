@@ -10,6 +10,7 @@ var ROW_HEIGHT = 36; // The height of each row you can move to in the game
 var SCORE_PER_ROW = 10;
 var SCORE_PER_LEVEL = 100;
 var TIME_PER_LEVEL = 1000;
+var LEVEL_UP_ALERT_TIMER = 50;
 var current_high_score = 0;
 
 var clamp = function(val, min, max) {
@@ -25,9 +26,11 @@ var clamp = function(val, min, max) {
 function Frogger() {
 	var spritesheet = new Image();
 	var dead_frog = new Image();
+	var level_up = new Image();
 	this.game_over = new Image();
 	spritesheet.src = "assets/frogger_sprites.png";
 	dead_frog.src = "assets/dead_frog.png";
+	level_up.src = "assets/level_up.png";
 	this.game_over.src = "assets/game_over.png";
 
 	var y_for_row_index = function(index) {
@@ -231,6 +234,7 @@ function Frogger() {
 	this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
 	this.currentHighestRow = 0;
 	this.score = 0;
+	this.levelUpAlertTimer = 0;
 
 	this.initialize_obstacles = function() {
 		this.logs = [];
@@ -363,6 +367,7 @@ function Frogger() {
 			this.initialize_obstacles();
 			this.currentTime = TIME_PER_LEVEL - (this.levelNumber * 50);
 			this.currentHighestRow = 0;
+			this.levelUpAlertTimer = LEVEL_UP_ALERT_TIMER;
 		}
 	};
 
@@ -409,10 +414,15 @@ function Frogger() {
 		} else if (!this.frog.isDying) {
 			this.kill_frog();
 		}
+
+		if (this.levelUpAlertTimer > 0) {
+			this.levelUpAlertTimer -= 1;
+		} else {
+			this.levelUpAlertTimer = 0;
+		}
 	};
 
 	this.draw_screen = function() {
-		// console.log("Draw!");
 		var canvas = document.getElementById('game');
 		var ctx = canvas.getContext('2d');
 		// Clear the screen
@@ -483,6 +493,11 @@ function Frogger() {
 
 		if (!this.is_gameover()) {
 			this.frog.draw_frog(ctx);
+		}
+
+		if (this.levelUpAlertTimer > 0) {
+			ctx.drawImage(level_up, 0, 0, 345, 37,
+				CANVAS_WIDTH/2 - level_up.width/2, CANVAS_HEIGHT/2 + this.levelUpAlertTimer, 345, 37);
 		}
 	};
 };
