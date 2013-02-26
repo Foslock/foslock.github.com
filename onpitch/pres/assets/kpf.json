@@ -109,7 +109,7 @@
 ,
 "title":"OnPitch Design",
 "minorVersion":4,
-"timestamp":"2013-02-26 11:55:17",
+"timestamp":"2013-02-26 12:02:49",
 "slideWidth":1024,
 "eventTimelines":[{"automaticPlay":false,
 "hyperlinks":[]
@@ -499,7 +499,7 @@
 "x":574,
 "height":52}
 ,
-"text":"OPMinInput*"}
+"text":"OPMicInput*"}
 ,{"targetRectangle":{"y":636,
 "width":492,
 "x":301,
@@ -530,6 +530,12 @@
 "height":0}
 ,
 "text":""}
+,{"targetRectangle":{"y":697.5,
+"width":137.9844,
+"x":855.5962,
+"height":44}
+,
+"text":"*singleton"}
 ]
 }
 ,{"automaticPlay":false,
