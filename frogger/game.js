@@ -8,7 +8,9 @@ var DYING_TIME = 40; // Frames that frog will show dead symbol
 var FRAME_INTERVAL = 30; // Time (ms) between each game loop frame
 var ROW_HEIGHT = 36; // The height of each row you can move to in the game
 var SCORE_PER_ROW = 10;
-var SCORE_PER_LEVEL = 100;
+var SCORE_PER_LEVEL = 50;
+var SCORE_PER_FIVE_LEVELS = 1000;
+var POINTS_PER_NEXT_LIFE = 10000;
 var TIME_PER_LEVEL = 1000;
 var LEVEL_UP_ALERT_TIMER = 50;
 var current_high_score = 0;
@@ -24,6 +26,11 @@ var clamp = function(val, min, max) {
 };
 
 function Frogger() {
+	var game = this;
+	this.doneLoading = function() {
+		// Nothing!
+	};
+	var loadedImageCount = 0;
 	var spritesheet = new Image();
 	var dead_frog = new Image();
 	var level_up = new Image();
@@ -32,6 +39,17 @@ function Frogger() {
 	dead_frog.src = "assets/dead_frog.png";
 	level_up.src = "assets/level_up.png";
 	this.game_over.src = "assets/game_over.png";
+	var loaded = function() {
+		loadedImageCount++;
+		if (loadedImageCount > 3) {
+			game.doneLoading();
+		}
+	};
+
+	spritesheet.onload = loaded;
+	dead_frog.onload = loaded;
+	level_up.onload = loaded;
+	this.game_over.onload = loaded;
 
 	var y_for_row_index = function(index) {
 		return 490 - (index * ROW_HEIGHT);
@@ -229,11 +247,12 @@ function Frogger() {
 
 	this.frog = new Frog();
 	this.frog.reset_location();
-	this.currentLives = 3;
+	this.currentLives = 5;
 	this.levelNumber = 1;
 	this.currentTime = (TIME_PER_LEVEL - (this.levelNumber * 50));
 	this.currentHighestRow = 0;
 	this.score = 0;
+	this.pointsUntilNextLife = POINTS_PER_NEXT_LIFE;
 	this.levelUpAlertTimer = 0;
 
 	this.initialize_obstacles = function() {
@@ -348,12 +367,19 @@ function Frogger() {
 			for (var i = 0; i < ROW_COUNT; i++) {
 				if (this.frog.y - this.frog.height/2 <= y_for_row_index(i) && i > this.currentHighestRow) {
 					this.score += SCORE_PER_ROW;
+					this.pointsUntilNextLife -= SCORE_PER_ROW;
 					this.currentHighestRow = i;
 				}
 			}
 		}
 		if (current_high_score < this.score) {
 			current_high_score = this.score;
+		}
+		if (this.pointsUntilNextLife <= 0) {
+			this.pointsUntilNextLife = POINTS_PER_NEXT_LIFE;
+			if (this.currentLives < 4) {
+				this.currentLives++;
+			}
 		}
 	};
 
@@ -363,6 +389,10 @@ function Frogger() {
 			this.frog.y - this.frog.height/2 <= y_for_row_index(ROW_COUNT-1)) {
 			this.score += SCORE_PER_LEVEL;
 			this.frog.reset_location();
+			if (this.levelNumber % 5 == 0) {
+				this.score += SCORE_PER_FIVE_LEVELS;
+				this.pointsUntilNextLife -= SCORE_PER_FIVE_LEVELS;
+			}
 			this.levelNumber++;
 			this.initialize_obstacles();
 			this.currentTime = TIME_PER_LEVEL - (this.levelNumber * 50);
@@ -459,7 +489,7 @@ function Frogger() {
 		// Draw HUD
 		ctx.fillStyle = "rgb(50, 220, 50)";
 		ctx.font = "24px Helvetica-Bold";
-		ctx.fillText("Level " + this.levelNumber, 65, 544);
+		ctx.fillText("Level " + this.levelNumber, 105, 544);
 		ctx.font = "14px Helvetica-Bold";
 		ctx.fillText("Score " + this.score + "   " + "Highscore " + current_high_score,
 			2, 560);
@@ -471,8 +501,9 @@ function Frogger() {
 			var red = 100 + (155 - (155 * perTime));
 			ctx.fillStyle = "rgb(" + Math.floor(red) + "," + Math.floor(green) + ", 0)";
 			ctx.strokeStyle = "#cb630a";
-			ctx.fillRect(CANVAS_WIDTH/2 - 4, 528, CANVAS_WIDTH/2 * perTime, 30);
-			ctx.strokeRect(CANVAS_WIDTH/2 - 4, 528, CANVAS_WIDTH/2, 30);
+			var timeXstart = CANVAS_WIDTH/2 + 40;
+			ctx.fillRect(timeXstart - 4, 528, (CANVAS_WIDTH-timeXstart) * perTime, 30);
+			ctx.strokeRect(timeXstart - 4, 528, (CANVAS_WIDTH-timeXstart), 30);
 		}
 
 		for (var i = 0; i < this.currentLives; i++) {
@@ -522,8 +553,10 @@ function start_game() {
 
 	};
 
-	// Start the game loop in an interval
-	intervalLoop = setInterval(game_loop, FRAME_INTERVAL);
+	game.doneLoading = function() {
+		// Start the game loop in an interval
+		intervalLoop = setInterval(game_loop, FRAME_INTERVAL);
+	}
 
 	checkArrows = function(e) {
 		e = e || window.event;
