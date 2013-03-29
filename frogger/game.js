@@ -535,15 +535,12 @@ function Frogger() {
 
 function promptForUsername(score) {
 	var name = prompt("Score: " + score + "\n\nPlease enter your username:", "Anonymous");
-	console.log("prompt!");
 	if (name && name != "") {
 		$.post("http://tranquil-ridge-8939.herokuapp.com/submit.json", {
 				game_title: "Frogger",
 				username: name,
 				score: score
-		}, function(data) {
-			console.log(data);
-		})
+		});
 	}
 }
 
