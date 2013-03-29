@@ -533,6 +533,19 @@ function Frogger() {
 	};
 };
 
+function promptForUsername(score) {
+	var name = prompt("Score: " + score + "\n\nPlease enter your username:", "Anonymous");
+	if (name && name != "") {
+		$.post("http://tranquil-ridge-8939.herokuapp.com/submit.json", {
+				game_title: "Frogger",
+				username: name,
+				score: score
+		}, function(data) {
+			console.log(data);
+		})
+	}
+}
+
 // Jump in function from HTML
 function start_game() {
 	var game = new Frogger();
@@ -549,6 +562,7 @@ function start_game() {
 			var canvas = document.getElementById('game');
 			var ctx = canvas.getContext('2d');
 			ctx.drawImage(game.game_over, CANVAS_WIDTH/2 - 200, CANVAS_HEIGHT/2 + 50);
+			promptForUsername(game.score);
 		}
 
 	};
