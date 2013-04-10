@@ -536,7 +536,7 @@ function Frogger() {
 function promptForUsername(score) {
 	var name = prompt("Score: " + score + "\n\nPlease enter your username:", "Anonymous");
 	if (name && name != "") {
-		$.post("http://tranquil-ridge-8939.herokuapp.com/submit.json", {
+		$.post("http://highscores-api.herokuapp.com/submit.json", {
 				game_title: "Frogger",
 				username: name,
 				score: score
